@@ -13,7 +13,7 @@ from dotenv import load_dotenv
 load_dotenv()
 # os.getenv("GOOGLE_API_KEY")
 # genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
-genai.configure(api_key="AIzaSyDCPEcdPv-N8uEH-oIVrvQdIK4zFxNRjPA")
+
 
 
 def get_pdf_text(pdf_docs):
@@ -34,7 +34,7 @@ def get_text_chunks(text):
 
 
 def get_vector_store(text_chunks):
-    embeddings = GoogleGenerativeAIEmbeddings(model = "models/embedding-001")
+    embeddings = GoogleGenerativeAIEmbeddings(model = "models/embedding-001",google_api_key="AIzaSyDCPEcdPv-N8uEH-oIVrvQdIK4zFxNRjPA")
     vector_store = FAISS.from_texts(text_chunks, embedding=embeddings)
     vector_store.save_local("faiss_index")
 
