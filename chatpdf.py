@@ -42,7 +42,7 @@ def get_vector_store(text_chunks):
 def get_conversational_chain():
 
     prompt_template = """
-    Answer the question as detailed as possible from the provided context, make sure to provide all the details \n\n
+    Answer the question or exaplin the topic as detailed as possible from the provided context, make sure to provide all the details \n\n
     Context:\n {context}?\n
     Question: \n{question}\n
 
@@ -50,7 +50,7 @@ def get_conversational_chain():
     """
 
     model = ChatGoogleGenerativeAI(model="gemini-pro",
-                             temperature=0.4)
+                             temperature=0.5)
 
     prompt = PromptTemplate(template = prompt_template, input_variables = ["context", "question"])
     chain = load_qa_chain(model, chain_type="stuff", prompt=prompt)
