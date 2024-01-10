@@ -11,8 +11,9 @@ from langchain.prompts import PromptTemplate
 from dotenv import load_dotenv
 
 load_dotenv()
-os.getenv("GOOGLE_API_KEY")
-genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+# os.getenv("GOOGLE_API_KEY")
+# genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+genai.configure(api_key="AIzaSyDCPEcdPv-N8uEH-oIVrvQdIK4zFxNRjPA")
 
 
 def get_pdf_text(pdf_docs):
@@ -95,7 +96,7 @@ def main():
                 print(raw_text)
                 text_chunks = get_text_chunks(raw_text)
                 get_vector_store(text_chunks)
-                st.success("Done")
+                st.success("Done Processing")
 
 
 
