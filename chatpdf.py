@@ -42,7 +42,7 @@ def get_vector_store(text_chunks):
 def get_conversational_chain():
 
     prompt_template = """
-    Answer the question as detailed as possible and creatively from the provided context only, make sure to provide all the detailed answer from context only' \n\n
+    Answer the question as detailed as possible and creatively from the provided context only, make sure to provide all the details' \n\n
     Context:\n {context}?\n
     Question: \n{question}\n
 
