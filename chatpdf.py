@@ -11,9 +11,9 @@ from langchain.prompts import PromptTemplate
 from dotenv import load_dotenv
 
 load_dotenv()
-# os.getenv("GOOGLE_API_KEY")
-# genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
-os.environ["GOOGLE_API_KEY"] = "AIzaSyDCPEcdPv-N8uEH-oIVrvQdIK4zFxNRjPA"
+os.getenv("GOOGLE_API_KEY")
+genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+
 
 
 def get_pdf_text(pdf_docs):
@@ -42,7 +42,7 @@ def get_vector_store(text_chunks):
 def get_conversational_chain():
 
     prompt_template = """
-    Answer the question or exaplin the topic as detailed as possible from the provided context, make sure to provide all the details \n\n
+    Answer the question as detailed as possible and creatively from the provided context only, make sure to provide all the detailed answer from context only' \n\n
     Context:\n {context}?\n
     Question: \n{question}\n
 
@@ -50,7 +50,7 @@ def get_conversational_chain():
     """
 
     model = ChatGoogleGenerativeAI(model="gemini-pro",
-                             temperature=0.5)
+                             temperature=0.4)
 
     prompt = PromptTemplate(template = prompt_template, input_variables = ["context", "question"])
     chain = load_qa_chain(model, chain_type="stuff", prompt=prompt)
@@ -60,7 +60,7 @@ def get_conversational_chain():
 
 
 def user_input(user_question):
-    embeddings = GoogleGenerativeAIEmbeddings(model = "models/embedding-001",google_api_key="AIzaSyDCPEcdPv-N8uEH-oIVrvQdIK4zFxNRjPA")
+    embeddings = GoogleGenerativeAIEmbeddings(model = "models/embedding-001")
     
     new_db = FAISS.load_local("faiss_index", embeddings)
     docs = new_db.similarity_search(user_question)
@@ -72,15 +72,15 @@ def user_input(user_question):
         {"input_documents":docs, "question": user_question}
         , return_only_outputs=True)
 
-    print(response)
-    st.write("Reply: ", response["output_text"])
+    # print(response)
+    st.write("Reply: \n", response["output_text"])
 
 
 
 
 def main():
     st.set_page_config("Chat PDF")
-    st.header("Using Gemini (Google GenAI)")
+    st.header("Multiple PDF Q&A with AI")
 
     user_question = st.text_input("Ask a Question from the PDF Files")
 
@@ -93,7 +93,7 @@ def main():
         if st.button("Submit & Process"):
             with st.spinner("Processing..."):
                 raw_text = get_pdf_text(pdf_docs)
-#                print(raw_text)
+
                 text_chunks = get_text_chunks(raw_text)
                 get_vector_store(text_chunks)
                 st.success("Done Processing")
@@ -102,3 +102,14 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+st.markdown("""
+    <style>
+        .faded-text {
+            opacity: 0.5;
+        }
+    </style>
+    <div class="faded-text">
+        Made by Gaurav Shrivastav
+    </div>
+""", unsafe_allow_html=True)
